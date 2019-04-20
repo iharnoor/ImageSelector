@@ -16,18 +16,25 @@
         android:weightSum="2">
 
         <Button
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
             android:id="@+id/btnChooseImg"
-            android:text="Choose img"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:text="Choose"
             android:textSize="20dp" />
 
         <EditText
             android:id="@+id/etImageInfo"
-            android:layout_width="240dp"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:inputType="text|textMultiLine"
             android:textSize="30dp" />
+
+        <Button
+            android:id="@+id/btnUpload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="upload" />
+
     </LinearLayout>
 
     <ImageView
@@ -40,8 +47,8 @@
 
     <com.example.imageselector.DragRectView
         android:id="@+id/dragRect"
-        android:layout_below="@+id/ll1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ll1" />
 
 </RelativeLayout>

@@ -13,8 +13,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -27,16 +30,23 @@ public class MainActivity extends Activity {
     private static final int PICK_IMAGE = 1;
     private static final int MULTIPLE_PERMISSIONS = 10; // code you want.
 
+    public static Rect currentRect = new Rect(0, 0, 0, 0);
+    public static ArrayList<ImageRecord> imageData = new ArrayList<>();
+
+
     private String[] permissions = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE};
 
     private Button btnChooseImg;
+    private Button btnUpload;
     private ImageView imageView;
+    private EditText etImageInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTheme(android.R.style.Theme_Holo);
 
 
         if (checkPermissions()) {
@@ -56,28 +66,29 @@ public class MainActivity extends Activity {
         }
 
         btnChooseImg = findViewById(R.id.btnChooseImg);
+        btnUpload = findViewById(R.id.btnUpload);
         imageView = findViewById(R.id.image);
+        etImageInfo = findViewById(R.id.etImageInfo);
 
         btnChooseImg.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-//                        getIntent.setType("image/*");
-//
-//                        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//                        pickIntent.setType("image/*");
-//
-//                        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-//                        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
-//
-//                        startActivityForResult(chooserIntent, PICK_IMAGE);
                         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                         photoPickerIntent.setType("image/*");
                         startActivityForResult(photoPickerIntent, PICK_IMAGE);
                     }
                 }
         );
+
+        btnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageRecord imageRecord = new ImageRecord(currentRect, etImageInfo.getText().toString());
+                imageData.add(imageRecord);
+                Toast.makeText(MainActivity.this, "DataBase Data: " + imageData.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private boolean checkPermissions() {
@@ -98,7 +109,6 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         // Here we need to check if the activity that was triggers was the Image Gallery.
         // If it is the requestCode will match the LOAD_IMAGE_RESULTS value.
         // If the resultCode is RESULT_OK and there is some data we know that an image was picked.
@@ -117,11 +127,25 @@ public class MainActivity extends Activity {
 
             imageView.setImageBitmap(bitmap);
 
-            // Do something with the bitmap
-
-
-            // At the end remember to close the cursor or you will end with the RuntimeException!
             cursor.close();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.mymenu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // handle button activities
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.mybutton) {
+            // do something here
+            Toast.makeText(this, "Button Works", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

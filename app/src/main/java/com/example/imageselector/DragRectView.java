@@ -9,6 +9,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import static com.example.imageselector.MainActivity.currentRect;
+
 public class DragRectView extends View {
 
     private Paint mRectPaint;
@@ -91,8 +93,9 @@ public class DragRectView extends View {
 
             case MotionEvent.ACTION_UP:
                 if (mCallback != null) {
-                    mCallback.onRectFinished(new Rect(Math.min(mStartX, mEndX), Math.min(mStartY, mEndY),
-                            Math.max(mEndX, mStartX), Math.max(mEndY, mStartY)));
+                    currentRect = new Rect(Math.min(mStartX, mEndX), Math.min(mStartY, mEndY),
+                            Math.max(mEndX, mStartX), Math.max(mEndY, mStartY));
+                    mCallback.onRectFinished(currentRect);
                 }
                 invalidate();
                 break;
