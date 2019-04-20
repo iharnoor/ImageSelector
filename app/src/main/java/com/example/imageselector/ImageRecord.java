@@ -20,7 +20,6 @@ public class ImageRecord {
     }
 
 
-
     public String getImageInfo() {
         return imageInfo;
     }
